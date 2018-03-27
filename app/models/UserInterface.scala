@@ -27,7 +27,9 @@ trait UserProfileBaseRepository {
 
   def updateUserProfile(user: UserInfo): Future[Boolean]
 
-  def checkLogin(email: String, pwd: String): Future[Boolean]
+  def checkLogin(email: String, pwd: String): Future[Option[UserInfo]]
+
+  def changePassword(email: String, pwd: String): Future[Boolean]
 }
 
 
@@ -50,14 +52,15 @@ trait UserProfileBaseRepositoryImpl extends UserProfileBaseRepository {
       .update(userInfo.first_name, userInfo.middle_name, userInfo.last_name, userInfo.mobile_number, userInfo.gender, userInfo.age, userInfo.hobbies)) map (_ > 0)
   }
 
-  def checkLogin(email: String, pwd: String):Future[Boolean] = {
+  def checkLogin(email: String, pwd: String):Future[Option[UserInfo]] = {
     val queryResult = userProfileQuery.filter(user => user.email.toLowerCase === email.toLowerCase &&  user.pwd === pwd).result.headOption
-    db.run(queryResult).map { userQuery =>
-      userQuery match {
-        case Some(user) => true
-        case None => false
-      }
+    db.run(queryResult)
     }
+
+  def changePassword(email: String, pwd: String): Future[Boolean] = {
+    db.run(userProfileQuery.filter(_.email.toLowerCase === email.toLowerCase)
+      .map(user => (user.pwd))
+      .update(pwd)) map (_ > 0)
   }
 }
 

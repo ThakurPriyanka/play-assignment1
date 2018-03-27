@@ -22,7 +22,12 @@ class DbService @Inject()(protected  val dbConfigProvider:DatabaseConfigProvider
     userInterface.updateUserProfile(record)
   }
 
-  def checkLoginDetail(email: String, pwd: String): Future[Boolean] = {
+  def checkLoginDetail(email: String, pwd: String): Future[Option[UserInfo]] = {
     userInterface.checkLogin(email, pwd)
   }
+
+  def updatePassword(email: String, pwd: String): Future[Boolean] = {
+    userInterface.changePassword(email, pwd)
+  }
+
 }

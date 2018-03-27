@@ -14,7 +14,13 @@
     <label>Password</label><input type = "password" name="pwd"/><br>
     <p class="errorLines">@user("pwd").error.map{error => password required }</p>
     <label>Confirm Password</label><input type = "password" name="confirm_pwd"/><br>
-    <p class="errorLines">@user("confirm_pwd").error.map{error => password not matching}</p>
+    @if(user.hasGlobalErrors) {
+    <ul>
+        @for(error <- user.globalErrors) {
+        <li class="errorLines">@error.message</li>
+        }
+    </ul>
+    }
     <label>Mobile Number</label><input type = "text" name="mobile_number"/><br>
     <p class="errorLines">@user("mobile_number").error.map{error => enter a valid mobile number}</p>
     <label>Gender</label>   <input type="radio" name="gender" value="male" checked> Male<br>

@@ -13,15 +13,16 @@ class ProfileForm {
       "first_name" -> text.verifying("", _.nonEmpty),
       "middle_name" -> text,
       "last_name" -> text.verifying("", _.nonEmpty),
-      "mobile_number" -> text,
-      //        .verifying pattern(error="A valid phone number is required", """[0-9.+]+""".r => true ),
+      "mobile_number" -> text.verifying( "A valid phone number is required",field => {
+        val regex = """[0-9.+]+""".r
+        field match { case regex(phone) => true
+        case _ => false
+        }}
+      ),
+      //
       "gender" -> text.verifying("", _.nonEmpty),
       "age" -> number(min = 18, max = 75),
       "hobbies" -> text.verifying("", _.nonEmpty)
-    )
-      /*verifying (
-        "Passwords do not match",
-      (user: UserInfoForm) => user.pwd === user.confirm_pwd)*/
-      (ProfileInfoForm.apply)(ProfileInfoForm.unapply)
+    ) (ProfileInfoForm.apply)(ProfileInfoForm.unapply)
   )
 }

@@ -7,8 +7,8 @@
 GET       /                          controllers.HomeController.index()
 GET      /profile                    controllers.HomeController.goTo()
 POST    /signUp                      controllers.HomeController.signUp()
-
-GET     /loginForm                  controlllers.HomeController.goToLogin()
+POST    /changePassword              controllers.HomeController.changePassword()
+GET     /loginForm                  controllers.HomeController.goToLogin()
 POST   /login                       controllers.HomeController.login()
 POST   /profileUpdate                controllers.HomeController.profile()
 # Map static resources from the /public folder to the /assets URL path

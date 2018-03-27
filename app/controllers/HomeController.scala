@@ -4,10 +4,9 @@ package controllers
 import javax.inject._
 
 import play.api.Logger
-import models.{UserInfo, UserInterface}
-import play.api.db.slick.DatabaseConfigProvider
+import models.UserInfo
 import play.api.mvc.{AnyContent, Request, _}
-import forms.{LoginForm, ProfileForm, UserForm}
+import forms.{LoginForm, PasswordForm, ProfileForm, UserForm}
 import services.DbService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -17,7 +16,8 @@ import scala.concurrent.Future
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, profileForm: ProfileForm, loginForm: LoginForm, dbService: DbService) extends AbstractController(cc) {
+class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, profileForm: ProfileForm,
+                               loginForm: LoginForm, passwordForm: PasswordForm, dbService: DbService) extends AbstractController(cc) {
 
   /**
     * Create an Action to render an HTML page.
@@ -37,17 +37,20 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
     userForm.userInfoForm.bindFromRequest().fold(
       formWithError => {
         //        Future.successful(BadRequest(views.html.error1(formWithError)))
-        Logger.info(s"${formWithError}")
+//        Logger.info(s"${formWithError}")
         Future.successful(BadRequest(views.html.signUp(formWithError)))
       },
       data => {
         Logger.info("stored")
+        val isAdmin = false
+        val isEnable = true
         val record = UserInfo(0, data.first_name, data.middle_name, data.last_name, data.email,
-          data.pwd, data.mobile_number, data.gender, data.age, data.hobbies, false, true)
+          data.pwd, data.mobile_number, data.gender, data.age, data.hobbies, isAdmin, isEnable)
         dbService.storeInDb(record).map {
           case true
           => Redirect(routes.HomeController.goTo).withSession( "first_name" -> record.first_name,
-            "middle_name" -> record.middle_name, "last_name" -> record.last_name, "email"-> record.email)
+            "middle_name" -> record.middle_name, "last_name" -> record.last_name, "email"-> record.email,
+          "isAdmin" -> record.isAdmin.toString, "isEnable" -> record.isEnable.toString)
             .flashing("success"-> "user created")
           case false
           => Ok("not stored")
@@ -90,27 +93,53 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
         useResult.map {
           case Some(user)
           => BadRequest(views.html.profile(user, formWithError))
+          case None => Ok("No user")
         }
       },
       data => {
         Logger.info("stored")
      useResult.flatMap {
-          case Some(user)
-          =>  val record = UserInfo(0, data.first_name, data.middle_name, data.last_name, user.email,
-            user.pwd, data.mobile_number, data.gender, data.age, data.hobbies, user.isAdmin, user.isEnable)
-            Logger.info(record.first_name);dbService.updateInfo(record).map {
-            case true
-            => Ok("stored")
-            case false
-            => Ok("not stored")
-          }
+       case Some(user)
+       => val record = UserInfo(0, data.first_name, data.middle_name, data.last_name, user.email,
+         user.pwd, data.mobile_number, data.gender, data.age, data.hobbies, user.isAdmin, user.isEnable)
+         Logger.info(record.first_name)
+         dbService.updateInfo(record).map {
+           case true
+           => Ok("stored")
+           case false
+           => Ok("not stored")
+         }
         }
       }
     )
   }
 
-  def goToLogin() = Action  { implicit request: Request[AnyContent] => {
-      Ok(views.html.login)
+  def forgetPassword() = Action {implicit request: Request[AnyContent] =>
+    Ok(views.html.forgetpassword(passwordForm.passwordInfoForm))
+  }
+
+  def changePassword()= Action.async  { implicit request: Request[AnyContent] => {
+    passwordForm.passwordInfoForm.bindFromRequest().fold(
+      formWithError => {
+        Logger.info(s"${formWithError}")
+        Future.successful(BadRequest(views.html.forgetpassword(formWithError)))
+      },
+      data => {
+        Logger.info("stored")
+        dbService.updatePassword(data.email, data.pwd).map {
+          case true
+          => Ok("done")
+          case false
+          => Ok("not done")
+        }
+      }
+    )
+  }
+  }
+
+
+  def goToLogin() = Action  { implicit request: Request[AnyContent] =>
+      Ok(views.html.login(loginForm.loginInfoForm))
   }
 
   def login() = Action.async  { implicit request: Request[AnyContent] =>
@@ -122,9 +151,9 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
       data => {
         Logger.info("stored")
             dbService.checkLoginDetail(data.email, data.pwd).map {
-              case true
+              case Some(user)
               => Ok("login")
-              case false
+              case None
               => Ok("not login")
             }
         }

@@ -1,0 +1,36 @@
+@(user: Form[forms.UserInfoForm])(implicit request: RequestHeader)
+@import helper._
+@main("Welcome to KIP") {
+<form action="@routes.HomeController.signUp()", method="post">
+    @CSRF.formField
+    <label>First Name</label><input type = "text" name="first_name"/><br>
+    <p class="errorLines">@user("first_name").error.map{error => first name is required}</p>
+    <label>Middle Name</label><input type = "text" name="middle_name"/><br>
+
+    <label>Last Name</label><input type = "text" name="last_name"/><br>
+    <p class="errorLines">@user("last_name").error.map{error => last name is required }</p>
+    <label>Email</label> <input type = "text" name="email"/><br>
+    <p class="errorLines">@user("email").error.map{error => not a valid email }</p>
+    <label>Password</label><input type = "password" name="pwd"/><br>
+    <p class="errorLines">@user("pwd").error.map{error => password required }</p>
+    <label>Confirm Password</label><input type = "password" name="confirm_pwd"/><br>
+    <p class="errorLines">@user("confirm_pwd").error.map{error => password not matching}</p>
+    <label>Mobile Number</label><input type = "text" name="mobile_number"/><br>
+    <p class="errorLines">@user("mobile_number").error.map{error => enter a valid mobile number}</p>
+    <label>Gender</label>   <input type="radio" name="gender" value="male" checked> Male<br>
+    <input type="radio" name="gender" value="female"> Female<br>
+    <input type="radio" name="gender" value="other"> Other<br>
+    <p class="errorLines"> @user("gender").error.map{error => select a gender}</p>
+    <label>age</label><input type = "text" name="age"/><br>
+    <p class="errorLines">@user("age").error.map{error => enter the age}</p>
+    <label>Hobbies</label>
+    <select name="hobbies">
+        <option value="Singing">Singing</option>
+        <option value="Dancing">Dancing</option>
+        <option value="Reading">Reading</option>
+        <option value="Cooking">Cooking</option>
+    </select><br>
+    <p class="errorLines">@user("hobbies").error.map{error => select the hobbies }</p>
+    <button name="sumbmit" type="submit">submit</button>
+</form>
+}

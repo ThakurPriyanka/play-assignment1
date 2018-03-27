@@ -1,0 +1,12 @@
+@(user: Form[forms.LoginInfoForm])(implicit request: RequestHeader)
+@import helper._
+@main("Welcome to KIP") {
+<form action="@routes.HomeController.login()", method="post">
+    @CSRF.formField
+    <label>Email</label> <input type = "text" name="email"/><br>
+    <p class="errorLines">@user("email").error.map{error => not a valid email }</p>
+    <label>Password</label><input type = "password" name="pwd"/><br>
+    <p class="errorLines">@user("pwd").error.map{error => password required }</p>
+    <button name="sumbmit" type="submit">login</button>
+</form>
+}

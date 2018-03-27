@@ -1,0 +1,59 @@
+@*
+* This template is called from the `index` template. This template
+* handles the rendering of the page header and body tags. It takes
+* two arguments, a `String` for the title of the page and an `Html`
+* object to insert into the body of the page.
+*@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @* Here's where we render the page title `String`. *@
+    <title>@title</title>
+    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/bootstap.min.css")">
+
+</head>
+<body>
+<nav id="menubar" class="navbar fixed-top navbar-dark bg-dark">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">logo</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="@routes.HomeController.signUp()" class="menuItem">Sign Up</a>
+                <a href="#" class="menuItem">Login</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div id="myjumbo" class="jumbotron">
+    <div class="container">
+        <div class="row-sm-4 row-sm-2 row-md-6 ">
+            <h1 class="centerAlign textColor">One Page wonder</h1>
+        </div>
+        <div class="row-sm-4 row-sm-2 row-md-6 ">
+            <p class="centerAlign textColor">Will rock your socks off</p>
+        </div>
+        <div class="row-sm-4 row-sm-2 row-md-6">
+            <p class="centerAlign">
+                <a id="mybutton" class="btn btn-danger btn-lg" href="#" role="button">Learn rock</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+@* And here's where we render the `Html` object containing
+* the page content. *@
+@content
+
+<script type="text/javascript" src="@routes.Assets.versioned("javascripts/bootstrap.min.js")"></script>
+<script type="text/javascript" src="@routes.Assets.versioned("javascripts/jquery-1.9.1.min.js")"></script>
+<script type="text/javascript" src="@routes.Assets.versioned("javascripts/main.js")"></script>
+</body>
+</html>

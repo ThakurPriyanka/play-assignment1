@@ -1,0 +1,35 @@
+
+#myjumbo {
+    background:url("../images/maxresdefault.jpg");
+    background-size: cover;
+}
+#mybutton {
+    border-radius: 40%;
+    background-color: darkcyan;
+    border-color: darkcyan;
+}
+#menubar{
+    opacity: 0.8;
+    height: 50px;
+}
+.centerAlign {
+    text-align: center;
+}
+.spacing{
+    padding-top: 80px;
+}
+.menuItem {
+    margin: 10px;
+    /*text-decoration-color: white;*/
+    color: white;
+}
+
+.textColor{
+    color: ghostwhite;
+}
+.sizeText {
+    font-size: 10px;
+}
+.marginbetween {
+    margin-bottom: 20px;
+}

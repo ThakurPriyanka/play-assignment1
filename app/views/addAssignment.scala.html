@@ -1,0 +1,12 @@
+@(assignment: Form[forms.AssignmentInfoForm])(implicit request: RequestHeader)
+@import helper._
+@main("Welcome to KIP") {
+<form action="@routes.AdminController.addAssignment()", method="post">
+    @CSRF.formField
+    <label>title</label> <input type = "text" name="title"/><br>
+    <p class="errorLines">@assignment("title").error.map{error => should not be empty }</p>
+    <label>Description</label><textarea rows="4" name="description"></textarea><br>
+    <p class="errorLines">@assignment("description").error.map{error => should not be empty }</p>
+    <button name="submit" type="submit">Submit</button>
+</form>
+}

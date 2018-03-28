@@ -1,6 +1,7 @@
 package forms
 
 
+import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
 
@@ -17,6 +18,6 @@ import play.api.data.Forms._
       )
       (PasswordInfoForm.apply)(PasswordInfoForm.unapply) verifying(
         "Passwords do not match",
-        field => field match { case user => equals(user.pwd, user.confirm_pwd)})
+        field => field match { case user => user.pwd == user.confirm_pwd})
     )
 }

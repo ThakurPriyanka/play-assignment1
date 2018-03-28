@@ -2,17 +2,14 @@
 @import helper._
 @main("Welcome to KIP") {
 <form action="@routes.HomeController.profile()", method="post">
+    <p>id@request.session.get("id")</p>
+    <p>@request.session.get("first_name")</p>
     @CSRF.formField
     @if(profile.isAdmin) {
-    <a href="routes.HomeController.goTo()">Profile</a>
-    <a href="#">Add Assignment</a>
-    <a href="#">view user</a>
-    <a href="#">Add assignment</a>
+        @adminHeader
     } else {
-    <a href="routes.HomeController.goTo()">Profile</a>
-    <a href="#">View Assignment</a>
+    @userHeader
     }
-
     <label>First Name</label><input type = "text" name="first_name" value='@profile.first_name'/><br>
     <p class="errorLines">@user("first_name").error.map{error => first name is required}</p>
     <label>Middle Name</label><input type = "text" name="middle_name" value='@profile.middle_name'/><br>

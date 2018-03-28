@@ -28,8 +28,8 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
     */
 
   def index()  = Action { implicit request: Request[AnyContent] =>
-//  Ok(views.html.index())
-  Ok(views.html.signUp(userForm.userInfoForm))
+  Ok(views.html.index())
+//  Ok(views.html.signUp(userForm.userInfoForm))
   }
 
   def signUp() = Action.async { implicit request: Request[AnyContent] =>
@@ -84,7 +84,7 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
       case Some(user)
       => Ok(views.html.profile(user, profileForm.profileInfoForm))
       case None
-      => Ok("Something get went wrong")
+      => Ok("Something went wrong")
     }
     profileForm.profileInfoForm.bindFromRequest().fold(
       formWithError => {
@@ -152,7 +152,10 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
         Logger.info("stored")
             dbService.checkLoginDetail(data.email, data.pwd).map {
               case Some(user)
-              => Ok("login")
+              =>  Redirect(routes.HomeController.index).withSession( "first_name" -> user.first_name,
+                "middle_name" -> user.middle_name, "last_name" -> user.last_name, "email"-> user.email,
+                "isAdmin" -> user.isAdmin.toString, "isEnable" -> user.isEnable.toString)
+                .flashing("success"-> "user created")
               case None
               => Ok("not login")
             }

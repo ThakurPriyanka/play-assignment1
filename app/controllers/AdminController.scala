@@ -37,5 +37,21 @@ class AdminController @Inject()(cc: ControllerComponents, dbServiceAssignment: D
         }
       )
     }
+
+  def viewAssignment() = Action.async { implicit request: Request[AnyContent] =>
+    val assignmentResult = dbServiceAssignment.getAllAssignment()
+    assignmentResult.map { assignmentList =>
+       Ok(views.html.viewAssignmentAdmin(assignmentList))
+    }
+  }
+
+  def deleteAssignment(id: String) = Action.async { implicit request: Request[AnyContent] =>
+        dbServiceAssignment.deleteAssignment(id.toInt).map {
+          case num if num > 0
+          => Ok("deleted")
+          case 0
+          => Ok("not deleted")
+        }
+      }
   }
 

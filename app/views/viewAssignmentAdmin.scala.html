@@ -1,0 +1,26 @@
+@(assignmentList: List[AssignmentInfo])(implicit request: RequestHeader)
+@import helper._
+@main("Welcome to KIP") {
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(assignment <- assignmentList) {
+        <tr>
+            <td></td>
+            <td>@assignment.title</td>
+            <td>@assignment.description</td>
+            <td><a href="@routes.AdminController.deleteAssignment(assignment.id.toString)">Delete</a></td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
+}

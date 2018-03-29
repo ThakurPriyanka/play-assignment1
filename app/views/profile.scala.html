@@ -6,9 +6,9 @@
     <p>@request.session.get("first_name")</p>
     @CSRF.formField
     @if(profile.isAdmin) {
-        @adminHeader
+        @adminHeader()
     } else {
-    @userHeader
+    @userHeader()
     }
     <label>First Name</label><input type = "text" name="first_name" value='@profile.first_name'/><br>
     <p class="errorLines">@user("first_name").error.map{error => first name is required}</p>

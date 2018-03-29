@@ -30,6 +30,12 @@ trait UserProfileBaseRepository {
   def checkLogin(email: String, pwd: String): Future[Option[UserInfo]]
 
   def changePassword(email: String, pwd: String): Future[Boolean]
+
+  def getAllUser(): Future[List[UserInfo]]
+
+  def enable(id: Int): Future[Boolean]
+
+  def disable(id: Int): Future[Boolean]
 }
 
 
@@ -61,6 +67,27 @@ trait UserProfileBaseRepositoryImpl extends UserProfileBaseRepository {
     db.run(userProfileQuery.filter(_.email.toLowerCase === email.toLowerCase)
       .map(user => (user.pwd))
       .update(pwd)) map (_ > 0)
+  }
+
+  def getAllUser(): Future[List[UserInfo]] = {
+    val queryResult = userProfileQuery.map(userDetail  => {
+      userDetail
+    } ).to[List].result
+    db.run(queryResult)
+  }
+
+  def enable(id: Int): Future[Boolean] = {
+    val valueOfEnable = true
+    db.run(userProfileQuery.filter(_.id === id)
+    .map(user => (user.isEnable))
+    .update(valueOfEnable)) map (_ > 0)
+  }
+
+  def disable(id: Int): Future[Boolean] = {
+    val valueOfDisable = false
+    db.run(userProfileQuery.filter(_.id === id)
+      .map(user => (user.isEnable))
+      .update(valueOfDisable)) map (_ > 0)
   }
 }
 

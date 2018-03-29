@@ -1,3 +1,4 @@
+@()
 <nav id="menubar" class="navbar fixed-top navbar-dark bg-dark">
     <div class="container">
         <div class="navbar-header">
@@ -5,8 +6,8 @@
         </div>
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a href="@routes.HomeController.profile()" class="menuItem">Profile</a>
-                <a href="#" class="menuItem">View Assignment</a>
+                <a href="@routes.HomeController.profile()" class="menuItem errorLines">Profile</a>
+                <a href="@routes.HomeController.viewAssignmentUser()" class="menuItem errorLines">View Assignment</a>
             </li>
         </ul>
     </div>

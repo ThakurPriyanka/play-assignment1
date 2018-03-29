@@ -7,7 +7,7 @@ import play.api.Logger
 import models.UserInfo
 import play.api.mvc.{AnyContent, Request, _}
 import forms.{LoginForm, PasswordForm, ProfileForm, UserForm}
-import services.DbService
+import services.{DbService, DbServiceAssignment}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -17,7 +17,8 @@ import scala.concurrent.Future
  */
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, profileForm: ProfileForm,
-                               loginForm: LoginForm, passwordForm: PasswordForm, dbService: DbService) extends AbstractController(cc) {
+                               loginForm: LoginForm, passwordForm: PasswordForm, dbService: DbService,
+                               dbServiceAssignment: DbServiceAssignment) extends AbstractController(cc) {
 
   /**
     * Create an Action to render an HTML page.
@@ -29,7 +30,11 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
 
   def index()  = Action { implicit request: Request[AnyContent] =>
   Ok(views.html.index())
-//  Ok(views.html.signUp(userForm.userInfoForm))
+
+  }
+
+  def goToSignUp() = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.signUp(userForm.userInfoForm))
   }
 
   def signUp() = Action.async { implicit request: Request[AnyContent] =>
@@ -88,7 +93,6 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
     }
     profileForm.profileInfoForm.bindFromRequest().fold(
       formWithError => {
-        //        Future.successful(BadRequest(views.html.error1(formWithError)))
         Logger.info(s"${formWithError}")
         useResult.map {
           case Some(user)
@@ -152,17 +156,29 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
         Logger.info("stored")
             dbService.checkLoginDetail(data.email, data.pwd).map {
               case Some(user)
-              =>  Redirect(routes.HomeController.index).withSession( "first_name" -> user.first_name,
-                "middle_name" -> user.middle_name, "last_name" -> user.last_name, "email"-> user.email,
-                "isAdmin" -> user.isAdmin.toString, "isEnable" -> user.isEnable.toString)
-                .flashing("success"-> "user created")
+              =>  {if(user.isEnable) {
+                Redirect(routes.HomeController.index).withSession("first_name" -> user.first_name,
+                  "middle_name" -> user.middle_name, "last_name" -> user.last_name, "email" -> user.email,
+                  "isAdmin" -> user.isAdmin.toString, "isEnable" -> user.isEnable.toString)
+                  .flashing("success" -> "user logged in")
+              }
+              else {
+                Redirect(routes.HomeController.goToLogin)
+                  .flashing("failure" -> "user can not logged in")
+              }}
               case None
-              => Ok("not login")
+              => Ok("can not logged in")
             }
         }
     )
   }
 
+  def viewAssignmentUser() = Action.async { implicit request: Request[AnyContent] =>
+    val assignmentResult = dbServiceAssignment.getAllAssignment()
+    assignmentResult.map { assignmentList =>
+      Ok(views.html.viewAssignmentUser(assignmentList))
+    }
+  }
   def signOut()= Action { implicit request: Request[AnyContent] =>
       Ok("bye").withNewSession
   }

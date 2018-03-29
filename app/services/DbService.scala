@@ -30,4 +30,16 @@ class DbService @Inject()(protected  val dbConfigProvider:DatabaseConfigProvider
     userInterface.changePassword(email, pwd)
   }
 
+  def getUserDetail(): Future[List[UserInfo]] = {
+    userInterface.getAllUser()
+  }
+
+  def enableUser(id: Int): Future[Boolean] = {
+    userInterface.enable(id)
+  }
+
+  def disableUser(id: Int): Future[Boolean] = {
+    userInterface.disable(id)
+  }
+
 }

@@ -6,14 +6,13 @@ import forms.AssignmentForm
 import models.AssignmentInfo
 import play.api.Logger
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
-import services.DbServiceAssignment
+import services.{DbService, DbServiceAssignment}
+
 import scala.concurrent.ExecutionContext.Implicits.global
-
-
 import scala.concurrent.Future
 @Singleton
 class AdminController @Inject()(cc: ControllerComponents, dbServiceAssignment: DbServiceAssignment,
-                                assignmentForm: AssignmentForm) extends AbstractController(cc) {
+                                dbService: DbService, assignmentForm: AssignmentForm) extends AbstractController(cc) {
 
   def goToAddAssignment() = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.addAssignment(assignmentForm.assignmentInfoForm))
@@ -37,6 +36,12 @@ class AdminController @Inject()(cc: ControllerComponents, dbServiceAssignment: D
         }
       )
     }
+  def viewUser() = Action.async { implicit request: Request[AnyContent] =>
+    val userListResult = dbService.getUserDetail()
+    userListResult.map { userList =>
+      Ok(views.html.viewUser(userList))
+    }
+  }
 
   def viewAssignment() = Action.async { implicit request: Request[AnyContent] =>
     val assignmentResult = dbServiceAssignment.getAllAssignment()
@@ -53,5 +58,23 @@ class AdminController @Inject()(cc: ControllerComponents, dbServiceAssignment: D
           => Ok("not deleted")
         }
       }
+
+  def enableUser(id: String) = Action.async { implicit request: Request[AnyContent] =>
+    dbService.enableUser(id.toInt).map {
+      case true
+      => Ok("enable")
+      case false
+      => Ok("can not make it enable")
+    }
   }
+
+  def disableUser(id: String) = Action.async { implicit request: Request[AnyContent] =>
+    dbService.disableUser(id.toInt).map {
+      case true
+      => Ok("disable")
+      case false
+      => Ok("can not make it disable")
+    }
+  }
+}
 

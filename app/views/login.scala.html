@@ -1,12 +1,13 @@
-@(user: Form[forms.LoginInfoForm])(implicit request: RequestHeader)
+@(user: Form[forms.LoginInfoForm])(implicit flash: Flash, request: RequestHeader)
 @import helper._
 @main("Welcome to KIP") {
 <form action="@routes.HomeController.login()", method="post">
     @CSRF.formField
+    @flash.get("failure")
     <label>Email</label> <input type = "text" name="email"/><br>
     <p class="errorLines">@user("email").error.map{error => not a valid email }</p>
     <label>Password</label><input type = "password" name="pwd"/><br>
     <p class="errorLines">@user("pwd").error.map{error => password required }</p>
-    <button name="sumbmit" type="submit">login</button>
+    <button name="submit" type="submit" @if( flash.get("failure"))  { disabled }>login</button>
 </form>
 }

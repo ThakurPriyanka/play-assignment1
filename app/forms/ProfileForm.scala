@@ -15,7 +15,7 @@ class ProfileForm {
       "last_name" -> text.verifying("", _.nonEmpty),
       "mobile_number" -> text.verifying( "A valid phone number is required",field => {
         val regex = """[0-9.+]+""".r
-        field match { case regex(phone) => true
+        field match { case regex(_) => true
         case _ => false
         }}
       ),

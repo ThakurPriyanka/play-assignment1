@@ -1,4 +1,4 @@
-@()
+@()(implicit request: RequestHeader)
 <nav id="menubar" class="navbar fixed-top navbar-dark bg-dark">
     <div class="container">
         <div class="navbar-header">
@@ -6,11 +6,30 @@
         </div>
         <ul class="nav navbar-nav navbar-right">
             <li>
+                <a href="@routes.HomeController.goToSignUp()" class="menuItem errorLines">Sign Up</a>
+                <a href="@routes.HomeController.goToLogin()" class="menuItem errorLines">Login</a>
+                @if(request.session.get("first_name")) {       <a href="@routes.HomeController.signOut()" class="menuItem errorLines">Log out</a> }
                 <a href="@routes.HomeController.profile()" class="menuItem">Profile</a>
-                <a href="#" class="menuItem">View Assignment</a>
-                <a href="#" class="menuItem">View User</a>
-                <a href="#" class="menuItem">Add Assignment</a>
+                <a href="@routes.AdminController.viewAssignment()" class="menuItem errorLines">View Assignment</a>
+                <a href="@routes.AdminController.viewUser()" class="menuItem errorLines">View User</a>
+                <a href="@routes.AdminController.goToAddAssignment()" class="menuItem errorLines">Add Assignment</a>
             </li>
         </ul>
     </div>
 </nav>
+
+<div id="myjumbo" class="jumbotron">
+    <div class="container">
+        <div class="row-sm-4 row-sm-2 row-md-6 ">
+            <h1 class="centerAlign textColor">One Page wonder</h1>
+        </div>
+        <div class="row-sm-4 row-sm-2 row-md-6 ">
+            <p class="centerAlign textColor">Will rock your socks off</p>
+        </div>
+        <div class="row-sm-4 row-sm-2 row-md-6">
+            <p class="centerAlign">
+                <a id="mybutton" class="btn btn-danger btn-lg" href="#" role="button">Learn rock</a>
+            </p>
+        </div>
+    </div>
+</div>

@@ -35,22 +35,22 @@ case class AssignmentInfo(id: Int, title: String, description: String)
 
     import profile.api._
 
-    def storeAssignment(assignemt: AssignmentInfo): Future[Boolean] =
-      db.run(assignemtQuery += assignemt) map (_ > 0)
+    def storeAssignment(assignment: AssignmentInfo): Future[Boolean] =
+      db.run(assignmentQuery += assignment) map (_ > 0)
 
     def getAssignment(title: String): Future[Option[AssignmentInfo]] = {
-      val queryResult = assignemtQuery.filter(_.title.toLowerCase === title.toLowerCase).result.headOption
+      val queryResult = assignmentQuery.filter(_.title.toLowerCase === title.toLowerCase).result.headOption
       db.run(queryResult)
     }
 
     def getAllAssignment(): Future[List[AssignmentInfo]] = {
-      val queryResult = assignemtQuery.map(assignmentDetail  => {
+      val queryResult = assignmentQuery.map(assignmentDetail  => {
         assignmentDetail
       } ).to[List].result
       db.run(queryResult)
     }
     def deleteAssignment(id: Int): Future[Int] = {
-      db.run(assignemtQuery.filter(_.id === id).delete)
+      db.run(assignmentQuery.filter(_.id === id).delete)
     }
   }
 
@@ -62,7 +62,7 @@ case class AssignmentInfo(id: Int, title: String, description: String)
     import profile.api._
 
 
-    val assignemtQuery: TableQuery[AssignmentDetail] = TableQuery[AssignmentDetail]
+    val assignmentQuery: TableQuery[AssignmentDetail] = TableQuery[AssignmentDetail]
     //A Tag marks a specific row represented by an AbstractTable instance.
 
     private[models] class AssignmentDetail(tag: Tag) extends Table[AssignmentInfo](tag, "assignmentDetail") {

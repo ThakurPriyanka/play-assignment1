@@ -4,51 +4,28 @@
 * two arguments, a `String` for the title of the page and an `Html`
 * object to insert into the body of the page.
 *@
-@(title: String)(content: Html)
+@(title: String)(content: Html)(implicit request: RequestHeader)
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     @* Here's where we render the page title `String`. *@
     <title>@title</title>
-    <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/bootstap.min.css")">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
     <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/bootstap.min.css")">
-
 </head>
 <body>
-
-        <ul>
-            <li>
-                <a href="@routes.HomeController.goToSignUp()" class="menuItem errorLines">Sign Up</a>
-                <a href="@routes.HomeController.goToLogin()" class="menuItem errorLines">Login</a>
-            </li>
-        </ul>
-
-
-
-<div id="myjumbo" class="jumbotron">
-    <div class="container">
-        <div class="row-sm-4 row-sm-2 row-md-6 ">
-            <h1 class="centerAlign textColor">One Page wonder</h1>
-        </div>
-        <div class="row-sm-4 row-sm-2 row-md-6 ">
-            <p class="centerAlign textColor">Will rock your socks off</p>
-        </div>
-        <div class="row-sm-4 row-sm-2 row-md-6">
-            <p class="centerAlign">
-                <a id="mybutton" class="btn btn-danger btn-lg" href="#" role="button">Learn rock</a>
-            </p>
-        </div>
-    </div>
-</div>
-
 @* And here's where we render the `Html` object containing
 * the page content. *@
 @content
 
-<script type="text/javascript" src="@routes.Assets.versioned("javascripts/bootstrap.min.js")"></script>
-<script type="text/javascript" src="@routes.Assets.versioned("javascripts/jquery-1.9.1.min.js")"></script>
-<script type="text/javascript" src="@routes.Assets.versioned("javascripts/main.js")"></script>
+<!--<script type="text/javascript" src="@routes.Assets.versioned("javascripts/bootstrap.min.js")"></script>-->
+<!--<script type="text/javascript" src="@routes.Assets.versioned("javascripts/jquery-1.9.1.min.js")"></script>-->
+<!--<script type="text/javascript" src="@routes.Assets.versioned("javascripts/main.js")"></script>-->
 </body>
 </html>

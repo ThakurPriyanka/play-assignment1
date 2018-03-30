@@ -1,9 +1,8 @@
 @(profile: UserInfo, user: Form[forms.ProfileInfoForm])(implicit flash: Flash,request: RequestHeader)
 @import helper._
 @main("Welcome to KIP") {
+@headerDescider()
 <form action="@routes.HomeController.profile()", method="post">
-    <p>id@request.session.get("id")</p>
-    <p>@request.session.get("first_name")</p>
     @CSRF.formField
     @if(profile.isAdmin) {
         @adminHeader()

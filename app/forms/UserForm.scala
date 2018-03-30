@@ -18,8 +18,8 @@ class UserForm {
       "pwd"-> text.verifying("", _.nonEmpty),
       "confirm_pwd" -> text.verifying("", _.nonEmpty),
       "mobile_number" -> text.verifying( "A valid phone number is required",field => {
-        val regex = """[0-9.+]+""".r
-        field match { case regex(phone) => true
+        val regex = """^[789]\d{9}$""".r
+        field match { case regex() => true
         case _ => false
         }}
       ),
@@ -31,7 +31,7 @@ class UserForm {
       "Passwords do not match",
       field => field match {
         case user => {
-          equals(user.pwd, user.confirm_pwd)
+          if (user.pwd == user.confirm_pwd) { true } else { false }
         }
       })
   )

@@ -8,6 +8,7 @@ import models.UserInfo
 import play.api.mvc.{AnyContent, Request, _}
 import forms.{LoginForm, PasswordForm, ProfileForm, UserForm}
 import services.{DbService, DbServiceAssignment}
+import utils.PasswordHashing
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -38,19 +39,20 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
   }
 
   def signUp() = Action.async { implicit request: Request[AnyContent] =>
-    Logger.info("entered")
+
     userForm.userInfoForm.bindFromRequest().fold(
       formWithError => {
         //        Future.successful(BadRequest(views.html.error1(formWithError)))
-//        Logger.info(s"${formWithError}")
+        Logger.info(s"${formWithError}")
         Future.successful(BadRequest(views.html.signUp(formWithError)))
       },
       data => {
         Logger.info("stored")
         val isAdmin = false
         val isEnable = true
+        val encryptedPwd = PasswordHashing.encryptPassword(data.pwd)
         val record = UserInfo(0, data.first_name, data.middle_name, data.last_name, data.email,
-          data.pwd, data.mobile_number, data.gender, data.age, data.hobbies, isAdmin, isEnable)
+          encryptedPwd, data.mobile_number, data.gender, data.age, data.hobbies, isAdmin, isEnable)
         dbService.storeInDb(record).map {
           case true
           => Redirect(routes.HomeController.goTo).withSession( "first_name" -> record.first_name,
@@ -130,7 +132,8 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
       },
       data => {
         Logger.info("stored")
-        dbService.updatePassword(data.email, data.pwd).map {
+        val encryptedPwd = PasswordHashing.encryptPassword(data.pwd)
+        dbService.updatePassword(data.email, encryptedPwd).map {
           case true
           => Ok("done")
           case false
@@ -154,7 +157,8 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
       },
       data => {
         Logger.info("stored")
-            dbService.checkLoginDetail(data.email, data.pwd).map {
+        val encryptedPwd = PasswordHashing.encryptPassword(data.pwd)
+            dbService.checkLoginDetail(data.email, encryptedPwd).map {
               case Some(user)
               =>  {if(user.isEnable) {
                 Redirect(routes.HomeController.index).withSession("first_name" -> user.first_name,
@@ -180,6 +184,7 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
     }
   }
   def signOut()= Action { implicit request: Request[AnyContent] =>
-      Ok("bye").withNewSession
+    Logger.info("out")
+    Ok("bye").withNewSession
   }
 }

@@ -1,6 +1,7 @@
 @(user: Form[forms.LoginInfoForm])(implicit flash: Flash, request: RequestHeader)
 @import helper._
 @main("Welcome to KIP") {
+@headerDescider()
 <form action="@routes.HomeController.login()", method="post">
     @CSRF.formField
     @flash.get("failure")
@@ -9,5 +10,7 @@
     <label>Password</label><input type = "password" name="pwd"/><br>
     <p class="errorLines">@user("pwd").error.map{error => password required }</p>
     <button name="submit" type="submit" @if( flash.get("failure"))  { disabled }>login</button>
+
+    <a href="@routes.HomeController.forgetPassword()">forget Password</a>
 </form>
 }

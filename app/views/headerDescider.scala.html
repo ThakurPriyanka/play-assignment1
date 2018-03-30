@@ -1,0 +1,11 @@
+@()(implicit request: RequestHeader)
+
+@if(request.session.get("first_name")) {
+@if(request.session.get("isAdmin")) {
+@adminHeader()
+} else {
+@userHeader()
+}
+} else {
+@firstheader()
+}

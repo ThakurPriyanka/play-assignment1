@@ -1,7 +1,7 @@
 @(user: Form[forms.UserInfoForm])(implicit request: RequestHeader)
 @import helper._
 @main("Welcome to KIP") {
-@headerDescider()
+
 <form action="@routes.HomeController.signUp()", method="post">
     @CSRF.formField
     <label>First Name</label><input type = "text" name="first_name"/><br>

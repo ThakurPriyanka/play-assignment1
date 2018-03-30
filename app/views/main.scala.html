@@ -22,6 +22,18 @@
 <body>
 @* And here's where we render the `Html` object containing
 * the page content. *@
+
+
+
+@if(request.session.get("first_name")) {
+@if(request.session.get("isAdmin")=="true") {
+@adminHeader()
+} else {
+@userHeader()
+}
+} else {
+@firstheader()
+}
 @content
 
 <!--<script type="text/javascript" src="@routes.Assets.versioned("javascripts/bootstrap.min.js")"></script>-->

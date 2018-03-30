@@ -9,7 +9,7 @@
                 <a href="@routes.HomeController.goToSignUp()" class="menuItem errorLines">Sign Up</a>
                 <a href="@routes.HomeController.goToLogin()" class="menuItem errorLines">Login</a>
                 @if(request.session.get("first_name")) {       <a href="@routes.HomeController.signOut()" class="menuItem errorLines">Log out</a> }
-                <a href="@routes.HomeController.profile()" class="menuItem errorLines">Profile</a>
+                <a href="@routes.HomeController.goToProfile()" class="menuItem errorLines">Profile</a>
                 <a href="@routes.HomeController.viewAssignmentUser()" class="menuItem errorLines">View Assignment</a>
             </li>
         </ul>

@@ -6,7 +6,7 @@
 # An example controller showing a sample home page
 GET       /                          controllers.HomeController.index()
 GET       /signUpForm                controllers.HomeController.goToSignUp()
-GET      /profile                    controllers.HomeController.goTo()
+GET      /profile                    controllers.HomeController.goToProfile()
 GET     /forgetPassword              controllers.HomeController.forgetPassword()
 POST    /signUp                      controllers.HomeController.signUp()
 POST    /changePassword              controllers.HomeController.changePassword()

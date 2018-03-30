@@ -55,9 +55,9 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
           encryptedPwd, data.mobile_number, data.gender, data.age, data.hobbies, isAdmin, isEnable)
         dbService.storeInDb(record).map {
           case true
-          => Redirect(routes.HomeController.goTo).withSession( "first_name" -> record.first_name,
+          => Redirect(routes.HomeController.goToProfile).withSession( "first_name" -> record.first_name,
             "middle_name" -> record.middle_name, "last_name" -> record.last_name, "email"-> record.email,
-          "isAdmin" -> record.isAdmin.toString, "isEnable" -> record.isEnable.toString)
+            "isAdmin" -> record.isAdmin.toString, "isEnable" -> record.isEnable.toString)
             .flashing("success"-> "user created")
           case false
           => Ok("not stored")
@@ -66,7 +66,7 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
     )
   }
 
-  def goTo() = Action.async { implicit request: Request[AnyContent] =>
+  def goToProfile() = Action.async { implicit request: Request[AnyContent] =>
     //  Ok(views.html.index())
     val email = request.session.get("email") match {
       case Some(email) => email

@@ -1,14 +1,9 @@
 @(profile: UserInfo, user: Form[forms.ProfileInfoForm])(implicit flash: Flash,request: RequestHeader)
 @import helper._
 @main("Welcome to KIP") {
-@headerDescider()
+
 <form action="@routes.HomeController.profile()", method="post">
     @CSRF.formField
-    @if(profile.isAdmin) {
-        @adminHeader()
-    } else {
-    @userHeader()
-    }
     <label>First Name</label><input type = "text" name="first_name" value='@profile.first_name'/><br>
     <p class="errorLines">@user("first_name").error.map{error => first name is required}</p>
     <label>Middle Name</label><input type = "text" name="middle_name" value='@profile.middle_name'/><br>
@@ -17,9 +12,9 @@
     <p class="errorLines">@user("last_name").error.map{error => last name is required }</p>
     <label>Mobile Number</label><input type = "text" name="mobile_number" value='@profile.mobile_number'/><br>
     <p class="errorLines">@user("mobile_number").error.map{error => enter a valid mobile number}</p>
-    <label>Gender</label>   <input type="radio" name="gender" value="male" checked> Male<br>
-    <input type="radio" name="gender" value="female"> Female<br>
-    <input type="radio" name="gender" value="other"> Other<br>
+    <label>Gender</label>   <input type="radio" name="gender" value="male" @if(profile.gender == "male") { checked }> Male<br>
+    <input type="radio" name="gender" value="female" @if(profile.gender == "female") { checked }> Female<br>
+    <input type="radio" name="gender" value="other" @if(profile.gender == "other") { checked }> Other<br>
     <p class="errorLines"> @user("gender").error.map{error => select a gender}</p>
     <label>age</label><input type = "text" name="age" value='@profile.age'/><br>
     <p class="errorLines">@user("age").error.map{error => enter the age}</p>

@@ -2,21 +2,23 @@
 @import helper._
 @main("Welcome to KIP") {
 
-<div class="table-responsive">
+<div class="table-responsive  col-md-8">
     <table class="table">
         <thead>
         <tr>
-            <th>#</th>
+            <th>ID</th>
             <th>First_Name</th>
             <th>Email</th>
             <th>Mobile_Number</th>
             <th>gender</th>
+            <th>Enable</th>
+            <th>Disable</th>
         </tr>
         </thead>
         <tbody>
         @for(user <- userList) {
         <tr>
-            <td></td>
+            <td>@user.id</td>
             <td>@user.first_name</td>
             <td>@user.email</td>
             <td>@user.mobile_number</td>

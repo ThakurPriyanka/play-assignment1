@@ -4,22 +4,28 @@
 
 <form action="@routes.HomeController.profile()", method="post">
     @CSRF.formField
-    <div class="form-group">
-    <label>First Name</label><input type = "text" name="first_name" value='@profile.first_name'/><br>
+    <div class="form-group col-md-6">
+    <label class="control-label col-sm-2">First Name</label>
+        <input type = "text" name="first_name" value='@profile.first_name' class="form-control"/><br>
     <p class="errorLines">@user("first_name").error.map{error => first name is required}</p>
-    <label>Middle Name</label><input type = "text" name="middle_name" value='@profile.middle_name'/><br>
+    <label class="control-label col-sm-2">Middle Name</label>
+        <input type = "text" name="middle_name" value='@profile.middle_name' class="form-control"/><br>
 
-    <label>Last Name</label><input type = "text" name="last_name" value='@profile.last_name'/><br>
+    <label class="control-label col-sm-2">Last Name</label>
+        <input type = "text" name="last_name" value='@profile.last_name' class="form-control"/><br>
     <p class="errorLines">@user("last_name").error.map{error => last name is required }</p>
-    <label>Mobile Number</label><input type = "text" name="mobile_number" value='@profile.mobile_number'/><br>
+    <label class="control-label col-sm-2">Mobile Number</label>
+        <input type = "text" name="mobile_number" value='@profile.mobile_number' class="form-control"/><br>
     <p class="errorLines">@user("mobile_number").error.map{error => enter a valid mobile number}</p>
-    <label>Gender</label>   <input type="radio" name="gender" value="male" @if(profile.gender == "male") { checked }> Male<br>
+    <label class="control-label col-sm-2">Gender</label>
+        <input type="radio" name="gender" value="male" @if(profile.gender == "male") { checked }> Male<br>
     <input type="radio" name="gender" value="female" @if(profile.gender == "female") { checked }> Female<br>
     <input type="radio" name="gender" value="other" @if(profile.gender == "other") { checked }> Other<br>
     <p class="errorLines"> @user("gender").error.map{error => select a gender}</p>
-    <label>age</label><input type = "text" name="age" value='@profile.age'/><br>
+    <label class="control-label col-sm-2">age</label>
+        <input type = "text" name="age" value='@profile.age'class="form-control"/><br>
     <p class="errorLines">@user("age").error.map{error => enter the age}</p>
-    <label>Hobbies</label>
+    <label class="control-label col-sm-2">Hobbies</label>
     <select name="hobbies" value='@profile.hobbies'>
         <option value="Singing">Singing</option>
         <option value="Dancing">Dancing</option>
@@ -27,7 +33,7 @@
         <option value="Cooking">Cooking</option>
     </select><br>
     <p class="errorLines">@user("hobbies").error.map{error => select the hobbies }</p>
-    <button name="sumbmit" type="submit">Update</button>
+    <button name="sumbmit" type="submit" class="btn btn-default">Update</button>
     </div>
 </form>
 }

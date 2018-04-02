@@ -4,18 +4,24 @@
 
 <form action="@routes.HomeController.signUp()", method="post">
     @CSRF.formField
-    <div class="form-group">
-    <label>First Name</label><input type = "text" name="first_name"/><br>
+    <div class="form-group col-md-6">
+    <label class="control-label col-sm-2">First Name</label>
+        <input type = "text" name="first_name" class="form-control" placeholder="Enter First name"/><br>
     <p class="errorLines">@user("first_name").error.map{error => first name is required}</p>
-    <label>Middle Name</label><input type = "text" name="middle_name"/><br>
+    <label class="control-label col-sm-2">Middle Name</label>
+        <input type = "text" name="middle_name" class="form-control" placeholder="Enter middle name"/><br>
 
-    <label>Last Name</label><input type = "text" name="last_name"/><br>
+    <label class="control-label col-sm-2">Last Name</label>
+        <input type = "text" name="last_name" class="form-control" placeholder="Enter last name"/><br>
     <p class="errorLines">@user("last_name").error.map{error => last name is required }</p>
-    <label>Email</label> <input type = "text" name="email"/><br>
+    <label class="control-label col-sm-2">Email</label>
+        <input type = "text" name="email" class="form-control" placeholder="Enter email"/><br>
     <p class="errorLines">@user("email").error.map{error => not a valid email }</p>
-    <label>Password</label><input type = "password" name="pwd"/><br>
+    <label class="control-label col-sm-2">Password</label>
+        <input type = "password" name="pwd" class="form-control" placeholder="Enter password"/><br>
     <p class="errorLines">@user("pwd").error.map{error => password required }</p>
-    <label>Confirm Password</label><input type = "password" name="confirm_pwd"/><br>
+    <label class="control-label col-sm-2">Confirm Password</label>
+        <input type = "password" name="confirm_pwd" class="form-control" placeholder="Enter confirm password"/><br>
     @if(user.hasGlobalErrors) {
     <ul>
         @for(error <- user.globalErrors) {
@@ -23,15 +29,18 @@
         }
     </ul>
     }
-    <label>Mobile Number</label><input type = "text" name="mobile_number"/><br>
+    <label class="control-label col-sm-2">Mobile Number</label>
+        <input type = "text" name="mobile_number" class="form-control" placeholder="Enter mobile number"/><br>
     <p class="errorLines">@user("mobile_number").error.map{error => enter a valid mobile number}</p>
-    <label>Gender</label>   <input type="radio" name="gender" value="male" checked> Male<br>
+    <label class="control-label col-sm-2">Gender</label>
+        <input type="radio" name="gender" value="male" checked> Male<br>
     <input type="radio" name="gender" value="female"> Female<br>
     <input type="radio" name="gender" value="other"> Other<br>
     <p class="errorLines"> @user("gender").error.map{error => select a gender}</p>
-    <label>age</label><input type = "text" name="age"/><br>
+    <label class="control-label col-sm-2">age</label>
+        <input type = "text" name="age" /><br>
     <p class="errorLines">@user("age").error.map{error => enter the age}</p>
-    <label>Hobbies</label>
+    <label class="control-label col-sm-2">Hobbies</label>
     <select name="hobbies">
         <option value="Singing">Singing</option>
         <option value="Dancing">Dancing</option>
@@ -39,7 +48,7 @@
         <option value="Cooking">Cooking</option>
     </select><br>
     <p class="errorLines">@user("hobbies").error.map{error => select the hobbies }</p>
-    <button name="sumbmit" type="submit">submit</button>
+    <button name="sumbmit" type="submit" class="btn btn-default" >submit</button>
     </div>
 </form>
 }

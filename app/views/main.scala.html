@@ -12,7 +12,7 @@
     @* Here's where we render the page title `String`. *@
     <title>@title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/bootstap.min.css")">
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/bootstrap.min.css")">
 <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
@@ -26,7 +26,8 @@
 
 
 @if(request.session.get("first_name")) {
-@if(request.session.get("isAdmin")=="true") {
+@if(request.session.get("isAdmin").get=="true") {
+
 @adminHeader()
 } else {
 @userHeader()
@@ -37,7 +38,7 @@
 @content
 
 <script type="text/javascript" src="@routes.Assets.versioned("javascripts/bootstrap.min.js")"></script>
-<script type="text/javascript" src="@routes.Assets.versioned("javascripts/jquery-1.9.1.min.js")"></script>
+<script type="text/javascript" src="@routes.Assets.versioned("javascripts/jquery-3.3.1.min.js")"></script>
 <script type="text/javascript" src="@routes.Assets.versioned("javascripts/main.js")"></script>
 </body>
 </html>

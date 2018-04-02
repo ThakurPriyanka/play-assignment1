@@ -1,16 +1,24 @@
 @()(implicit request: RequestHeader)
-<nav id="menubar" class="navbar fixed-top navbar-dark bg-dark">
+<nav id="menubar" class="navbar fixed-top navbar-inverse bg-inverse">
     <div class="container">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">logo</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a href="@routes.HomeController.goToSignUp()" class="menuItem errorLines">Sign Up</a>
-                <a href="@routes.HomeController.goToLogin()" class="menuItem errorLines">Login</a>
-                @if(request.session.get("first_name")) {       <a href="@routes.HomeController.signOut()" class="menuItem errorLines">Log out</a> }
-                <a href="@routes.HomeController.goToProfile()" class="menuItem errorLines">Profile</a>
-                <a href="@routes.HomeController.viewAssignmentUser()" class="menuItem errorLines">View Assignment</a>
+                <a href="@routes.HomeController.goToSignUp()" class="menuItem">Sign Up</a>
+            </li>
+            <li>
+                <a href="@routes.HomeController.goToLogin()" class="menuItem">Login</a>
+            </li>
+            <li>
+                @if(request.session.get("first_name")) {       <a href="@routes.HomeController.signOut()" class="menuItem">Log out</a> }
+            </li>
+            <li>
+                <a href="@routes.HomeController.goToProfile()" class="menuItem">Profile</a>
+            </li>
+            <li>
+                <a href="@routes.HomeController.viewAssignmentUser()" class="menuItem">View Assignment</a>
             </li>
         </ul>
     </div>

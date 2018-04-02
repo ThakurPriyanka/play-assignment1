@@ -20,6 +20,8 @@ class AdminControllerTest extends PlaySpec with Mockito {
 
   "go to add assignment page" in {
     val controller = getMockedObject
+    when(controller.assignmentForm.assignmentInfoForm) thenReturn { val form = new AssignmentForm{}
+    form.assignmentInfoForm}
     val result = controller.adminController.goToAddAssignment().apply(FakeRequest()
       .withCSRFToken)
     status(result) must equal(OK)

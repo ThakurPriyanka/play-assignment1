@@ -5,12 +5,14 @@
 <form action="@routes.HomeController.login()", method="post">
     @CSRF.formField
     @flash.get("failure")
+    <div class="form-group">
     <label>Email</label> <input type = "text" name="email"/><br>
     <p class="errorLines">@user("email").error.map{error => not a valid email }</p>
     <label>Password</label><input type = "password" name="pwd"/><br>
     <p class="errorLines">@user("pwd").error.map{error => password required }</p>
     <button name="submit" type="submit" @if( flash.get("failure"))  { disabled }>login</button>
-
+<br>
     <a href="@routes.HomeController.forgetPassword()">forget Password</a>
+    </div>
 </form>
 }

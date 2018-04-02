@@ -4,10 +4,12 @@
 
 <form action="@routes.AdminController.addAssignment()", method="post">
     @CSRF.formField
+    <div class="form-group">
     <label>title</label> <input type = "text" name="title"/><br>
     <p class="errorLines">@assignment("title").error.map{error => should not be empty }</p>
     <label>Description</label><textarea rows="4" name="description"></textarea><br>
     <p class="errorLines">@assignment("description").error.map{error => should not be empty }</p>
     <button name="submit" type="submit">Submit</button>
+    </div>
 </form>
 }

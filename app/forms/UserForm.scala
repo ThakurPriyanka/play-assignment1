@@ -1,7 +1,6 @@
 
 package forms
 
-import play.api.Logger
 import play.api.data.Forms._
 import play.api.data.Form
 

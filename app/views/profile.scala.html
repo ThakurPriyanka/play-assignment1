@@ -4,6 +4,7 @@
 
 <form action="@routes.HomeController.profile()", method="post">
     @CSRF.formField
+    <div class="form-group">
     <label>First Name</label><input type = "text" name="first_name" value='@profile.first_name'/><br>
     <p class="errorLines">@user("first_name").error.map{error => first name is required}</p>
     <label>Middle Name</label><input type = "text" name="middle_name" value='@profile.middle_name'/><br>
@@ -27,5 +28,6 @@
     </select><br>
     <p class="errorLines">@user("hobbies").error.map{error => select the hobbies }</p>
     <button name="sumbmit" type="submit">Update</button>
+    </div>
 </form>
 }

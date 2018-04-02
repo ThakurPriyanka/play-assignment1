@@ -1,33 +1,19 @@
 package models
 
-import akka.Done
-import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import org.specs2.mock.Mockito
 import org.specs2.mutable.Specification
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{inMemoryDatabase, running}
-import play.api.test.Injecting
 import services.DbService
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 import scala.reflect.ClassTag
 
-class ModelsTest[T: ClassTag] {
-  def fakeApp: Application = {
-    new GuiceApplicationBuilder()
-        .configure(inMemoryDatabase())
-      .build()
-  }
-
-  lazy val app2doo = Application.instanceCache
-  lazy val repository: T = app2doo(fakeApp)
-}
 
 class UserInterfaceTest extends Specification with Mockito  {
 
+  "User interface test cases" should {
     "store the data"  in {
       val userRepository = mock[UserInterface]
       val user = UserInfo(0, "priyanka", "", "thakur", "abc@gmail.com",
@@ -126,4 +112,6 @@ class UserInterfaceTest extends Specification with Mockito  {
       val actual = Await.result(userService.disableUser(id), Duration.Inf)
       actual must equalTo(true)
     }
+
+  }
 }

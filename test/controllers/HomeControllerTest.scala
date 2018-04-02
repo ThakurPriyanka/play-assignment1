@@ -5,7 +5,6 @@ import forms._
 import org.mockito.Mockito.when
 import org.scalatestplus.play.PlaySpec
 import org.specs2.mock.Mockito
-import play.Logger
 import play.api.mvc.{ControllerComponents, Session}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.stubControllerComponents
@@ -26,7 +25,9 @@ class HomeControllerTest extends PlaySpec with Mockito {
 
   "go to user info page" in {
     val controller = getMockedObject
-    val result = controller.homeController.goToSignUp().apply(FakeRequest().withCSRFToken)
+    mock[UserForm]
+    val result = controller.homeController.goToSignUp().apply(FakeRequest().withFormUrlEncodedBody("csrfToken"
+      -> "9c48f081724087b31fcf6099b7eaf6a276834cd9-1487743474314-cda043ddc3d791dc500e66ea").withCSRFToken)
     status(result) must equal(OK)
   }
 
@@ -44,15 +45,15 @@ class HomeControllerTest extends PlaySpec with Mockito {
 
   "go to login profile page" in {
     val controller = getMockedObject
-    val session =  mock[Session]
-    val email = session.get("email").get
-    Logger.info("email"+email)
+    mock[Session]
+    mock[ProfileForm]
+    val email = "abc@gmail.com"
     val user = Option(models.UserInfo(0,"priyanka", "", "thakur", "abc@gmail.com",
       "9c48f081724087b31fcf6099b7eaf6a276834cd9-1487743474314-cda043ddc3d791dc500e66ea",
       "9999999999", "female", 23, "Cooking", false, true))
     when(controller.dbService.getData(email)) thenReturn Future.successful(user)
     val result = controller.homeController.goToProfile()
-      .apply(FakeRequest())
+      .apply(FakeRequest().withSession("email" -> "abc@gmail.com").withCSRFToken)
     status(result) must equal(OK)
   }
 

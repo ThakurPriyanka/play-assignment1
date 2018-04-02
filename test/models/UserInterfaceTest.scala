@@ -4,7 +4,7 @@ import org.specs2.mock.Mockito
 import org.specs2.mutable.Specification
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
-import services.DbService
+import services.DbServiceTest
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}

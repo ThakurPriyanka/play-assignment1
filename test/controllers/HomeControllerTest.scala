@@ -130,14 +130,16 @@ class HomeControllerTest extends PlaySpec with Mockito {
   "user changed password" in {
     val controller = getMockedObject
 
-    val password = PasswordInfoForm( "abc@gmail.com",
-      "qaz","qaz")
+    val password = PasswordInfoForm( "abc@gmail.com","qaz","qaz")
 
     val passwordForm = new PasswordForm {}.passwordInfoForm.fill(password)
     val encryptedpwd = PasswordHashing.encryptPassword(password.pwd)
 
     when(controller.passwordForm.passwordInfoForm) thenReturn passwordForm
     when(controller.dbService.updatePassword(password.email, encryptedpwd)) thenReturn Future.successful(true)
+
+
+
 
     val request = FakeRequest(POST, "/changePassword").withFormUrlEncodedBody("csrfToken"
       -> "9c48f081724087b31fcf6099b7eaf6a276834cd9-1487743474314-cda043ddc3d791dc500e66ea","email"-> "abc@gmail.com",
@@ -180,6 +182,39 @@ class HomeControllerTest extends PlaySpec with Mockito {
 
     val result = controller.homeController.signUp().apply(request)
     status(result) must equal(303)
+  }
+
+  "should see a user profile" in {
+    val controller = getMockedObject
+    mock[Session]
+    val email = "abc@gmail.com"
+
+    val user = models.UserInfo(1,"priyanka", "", "thakur", "abc@gmail.com",
+      "8d6c5597d25eca212ea6c6cacc00e247b8c631343a70147cb81374ff72f414",
+      "9999999999", "female", 23, "Cooking", false, true)
+
+    when(controller.dbService.getData(email)) thenReturn Future.successful(Option(user))
+
+    val profile = ProfileInfoForm("priyanka", "", "thakur",
+      "9999999999", "female", 23, "Cooking")
+
+    val profileForm = new ProfileForm {}.profileInfoForm.fill(profile)
+
+
+
+    when(controller.profileForm.profileInfoForm) thenReturn profileForm
+    when(controller.dbService.getData(email)) thenReturn Future.successful(Option(user))
+    when(controller.dbService.updateInfo(user)) thenReturn Future.successful(true)
+
+
+    val request = FakeRequest(POST, "/profileUpdate").withFormUrlEncodedBody("csrfToken"
+        -> "9c48f081724087b31fcf6099b7eaf6a276834cd9-1487743474314-cda043ddc3d791dc500e66ea", "first_name"-> "priyanka","middle_name" -> "", "last_name" -> "thakur",
+      "mobile_number" -> "9999999999","gender"-> "female", "age" -> "23","hobbies"-> "Cooking")
+            .withSession("email"->"abc@gmail.com")
+        .withCSRFToken
+
+    val result = controller.homeController.profile().apply(request)
+    status(result) must equal(400)
   }
 
 

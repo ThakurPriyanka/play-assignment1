@@ -13,7 +13,6 @@ import play.api.test.Helpers._
 import play.api.test.CSRFTokenHelper._
 import services.{DbService, DbServiceAssignment}
 
-
 import scala.concurrent.Future
 
 class AdminControllerTest extends PlaySpec with Mockito {
@@ -75,6 +74,48 @@ class AdminControllerTest extends PlaySpec with Mockito {
     status(result) must equal(OK)
   }
 
+
+  "form error while adding assignment" in {
+    val controller = getMockedObject
+
+    val assignment = AssignmentInfoForm("", "play application")
+
+    val assignmentForm = new AssignmentForm {}.assignmentInfoForm.fill(assignment)
+
+    when(controller.assignmentForm.assignmentInfoForm) thenReturn assignmentForm
+
+    val request = FakeRequest(POST, "/signUp").withFormUrlEncodedBody("csrfToken"
+        -> "9c48f081724087b31fcf6099b7eaf6a276834cd9-1487743474314-cda043ddc3d791dc500e66ea",
+      "title" -> "", "description"->"play application")
+        .withCSRFToken
+
+    val result = controller.adminController.addAssignment().apply(request)
+    status(result) must equal(400)
+  }
+
+
+  "can not store  assignment in db due db validation" in {
+    val controller = getMockedObject
+
+    val assignment = AssignmentInfoForm("assignment1", "play application")
+
+    val assignmentForm = new AssignmentForm {}.assignmentInfoForm.fill(assignment)
+    val payload = models.AssignmentInfo(0,"assignment1", "play application")
+
+
+    when(controller.assignmentForm.assignmentInfoForm) thenReturn assignmentForm
+    when(controller.dbServiceAssignment.store(payload)) thenReturn Future.successful(false)
+
+
+    val request = FakeRequest(POST, "/signUp").withFormUrlEncodedBody("csrfToken"
+        -> "9c48f081724087b31fcf6099b7eaf6a276834cd9-1487743474314-cda043ddc3d791dc500e66ea",
+      "title" -> "assignment1", "description"->"play application")
+        .withCSRFToken
+
+    val result = controller.adminController.addAssignment().apply(request)
+    status(result) must equal(OK)
+  }
+
   "delete assignment" in {
     val controller = getMockedObject
     val id = 1
@@ -100,6 +141,16 @@ class AdminControllerTest extends PlaySpec with Mockito {
     status(result) must equal(OK)
   }
 
+
+
+  "delete assignment that does not exit" in {
+    val controller = getMockedObject
+    val id = 1
+    val resultNumber = 0
+    when(controller.dbServiceAssignment.deleteAssignment(id)) thenReturn Future.successful(resultNumber)
+    val result = controller.adminController.deleteAssignment(id.toString).apply(FakeRequest().withCSRFToken)
+    status(result) must equal(OK)
+  }
 
 
   def getMockedObject: TestObjects = {

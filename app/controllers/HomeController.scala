@@ -31,7 +31,6 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
 
   def index()  = Action { implicit request: Request[AnyContent] =>
   Ok(views.html.index())
-
   }
 
   def goToSignUp() = Action { implicit request: Request[AnyContent] =>
@@ -152,7 +151,6 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
   def login() = Action.async  { implicit request: Request[AnyContent] =>
     loginForm.loginInfoForm.bindFromRequest().fold(
       formWithError => {
-        Logger.info(s"${formWithError}")
         Future.successful(BadRequest(views.html.login(formWithError)))
       },
       data => {
@@ -184,7 +182,6 @@ class HomeController @Inject()(cc: ControllerComponents,  userForm:  UserForm, p
     }
   }
   def signOut()= Action { implicit request: Request[AnyContent] =>
-    Logger.info("out")
-    Ok("bye").withNewSession
+    Redirect(routes.HomeController.index).withNewSession
   }
 }

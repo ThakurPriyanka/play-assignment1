@@ -6,7 +6,9 @@ import play.api.data.Forms._
 import play.api.data.Form
 
 
-case class UserInfoForm(first_name: String, middle_name: String, last_name: String, email: String, pwd: String, confirm_pwd: String, mobile_number: String, gender: String, age: Int, hobbies: String)
+case class UserInfoForm(first_name: String, middle_name: String, last_name: String, email: String,
+                        pwd: String, confirm_pwd: String, mobile_number: String, gender: String,
+                        age: Int, hobbies: String)
 
 class UserForm {
   val userInfoForm = Form(

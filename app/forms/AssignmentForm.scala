@@ -7,11 +7,13 @@ case class AssignmentInfoForm(title: String, description: String)
 
 class AssignmentForm {
 
-  val assignmentInfoForm = Form(
-    mapping(
-      "title" -> text.verifying("", _.nonEmpty),
-      "description"-> text.verifying("", _.nonEmpty),
+  val assignmentInfoForm: Form[AssignmentInfoForm] = {
+    Form(
+      mapping(
+        "title" -> text.verifying("", _.nonEmpty),
+        "description" -> text.verifying("", _.nonEmpty),
+      )
+      (AssignmentInfoForm.apply)(AssignmentInfoForm.unapply)
     )
-    (AssignmentInfoForm.apply)(AssignmentInfoForm.unapply)
-  )
+  }
 }

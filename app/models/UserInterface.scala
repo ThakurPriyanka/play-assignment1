@@ -1,4 +1,5 @@
 package models
+
 import javax.inject.Inject
 
 
@@ -14,10 +15,8 @@ case class UserInfo(id: Int, first_name: String, middle_name: String, last_name:
 
 
 class UserInterface @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends UserProfileBaseRepository
-  with UserProfileBaseRepositoryImpl with UserProfileRepositoryTable {}
-
-
+    extends UserProfileBaseRepository
+        with UserProfileBaseRepositoryImpl with UserProfileRepositoryTable
 
 
 trait UserProfileBaseRepository {
@@ -54,44 +53,43 @@ trait UserProfileBaseRepositoryImpl extends UserProfileBaseRepository {
 
   def updateUserProfile(userInfo: UserInfo): Future[Boolean] = {
     db.run(userProfileQuery.filter(_.email.toLowerCase === userInfo.email.toLowerCase)
-      .map(user => (user.first_name, user.middle_name, user.last_name, user.mobile_number, user.gender, user.age, user.hobbies))
-      .update(userInfo.first_name, userInfo.middle_name, userInfo.last_name, userInfo.mobile_number, userInfo.gender, userInfo.age, userInfo.hobbies)) map (_ > 0)
+        .map(user => (user.first_name, user.middle_name, user.last_name, user.mobile_number, user.gender, user.age, user.hobbies))
+        .update(userInfo.first_name, userInfo.middle_name, userInfo.last_name, userInfo.mobile_number,
+          userInfo.gender, userInfo.age, userInfo.hobbies)) map (_ > 0)
   }
 
-  def checkLogin(email: String, pwd: String):Future[Option[UserInfo]] = {
-    val queryResult = userProfileQuery.filter(user => user.email.toLowerCase === email.toLowerCase &&  user.pwd === pwd).result.headOption
+  def checkLogin(email: String, pwd: String): Future[Option[UserInfo]] = {
+    val queryResult = userProfileQuery.filter(user => user.email.toLowerCase === email.toLowerCase && user.pwd === pwd).result.headOption
     db.run(queryResult)
-    }
+  }
 
   def changePassword(email: String, pwd: String): Future[Boolean] = {
     db.run(userProfileQuery.filter(_.email.toLowerCase === email.toLowerCase)
-      .map(user => (user.pwd))
-      .update(pwd)) map (_ > 0)
+        .map(user => (user.pwd))
+        .update(pwd)) map (_ > 0)
   }
 
   def getAllUser(): Future[List[UserInfo]] = {
-    val queryResult = userProfileQuery.map(userDetail  => {
+    val queryResult = userProfileQuery.map(userDetail => {
       userDetail
-    } ).to[List].result
+    }).to[List].result
     db.run(queryResult)
   }
 
   def enable(id: Int): Future[Boolean] = {
     val valueOfEnable = true
     db.run(userProfileQuery.filter(_.id === id)
-    .map(user => (user.isEnable))
-    .update(valueOfEnable)) map (_ > 0)
+        .map(user => (user.isEnable))
+        .update(valueOfEnable)) map (_ > 0)
   }
 
   def disable(id: Int): Future[Boolean] = {
     val valueOfDisable = false
     db.run(userProfileQuery.filter(_.id === id)
-      .map(user => (user.isEnable))
-      .update(valueOfDisable)) map (_ > 0)
+        .map(user => (user.isEnable))
+        .update(valueOfDisable)) map (_ > 0)
   }
 }
-
-
 
 
 trait UserProfileRepositoryTable extends HasDatabaseConfigProvider[JdbcProfile] {
@@ -100,8 +98,9 @@ trait UserProfileRepositoryTable extends HasDatabaseConfigProvider[JdbcProfile] 
 
 
   val userProfileQuery: TableQuery[UserInfoProfile] = TableQuery[UserInfoProfile]
-  //A Tag marks a specific row represented by an AbstractTable instance.
 
+  //A Tag marks a specific row represented by an AbstractTable instance.
+//scalastyle:off
   private[models] class UserInfoProfile(tag: Tag) extends Table[UserInfo](tag, "userInfo") {
     def id: Rep[Int] = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
@@ -127,8 +126,8 @@ trait UserProfileRepositoryTable extends HasDatabaseConfigProvider[JdbcProfile] 
 
     def isEnable: Rep[Boolean] = column[Boolean]("isEnable")
 
-    def * : ProvenShape[UserInfo] = (id, first_name, middle_name, last_name, email, pwd, mobile_number, gender, age, hobbies, isAdmin, isEnable) <>(UserInfo.tupled, UserInfo.unapply)
+    def * : ProvenShape[UserInfo] = (id, first_name, middle_name, last_name, email, pwd, mobile_number, gender, age, hobbies, isAdmin, isEnable) <> (UserInfo.tupled, UserInfo.unapply)
   }
-
+  //scalastyle:on
 
 }

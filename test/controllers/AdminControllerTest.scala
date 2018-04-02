@@ -100,6 +100,8 @@ class AdminControllerTest extends PlaySpec with Mockito {
     status(result) must equal(OK)
   }
 
+
+
   def getMockedObject: TestObjects = {
     val mockedAssignmentFormRepo = mock[AssignmentForm]
     val dbService = mock[DbService]

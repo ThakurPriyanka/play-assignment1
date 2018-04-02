@@ -7,11 +7,13 @@ case class LoginInfoForm(email: String, pwd: String)
 
 class LoginForm {
 
-  val loginInfoForm = Form(
-    mapping(
-      "email" -> email,
-      "pwd"-> text.verifying("", _.nonEmpty),
-    )
+  val loginInfoForm: Form[LoginInfoForm] = {
+    Form(
+      mapping(
+        "email" -> email,
+        "pwd" -> text.verifying("", _.nonEmpty),
+      )
       (LoginInfoForm.apply)(LoginInfoForm.unapply)
-  )
+    )
+  }
 }

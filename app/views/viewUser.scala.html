@@ -23,8 +23,8 @@
             <td>@user.email</td>
             <td>@user.mobile_number</td>
             <td>@user.gender</td>
-            <td><a href="@routes.AdminController.enableUser(user.id.toString)">Enable</a></td>
-            <td><a href="@routes.AdminController.disableUser(user.id.toString)">Disable</a></td>
+            <td><a @if(user.isEnable) { class = "disabled" }  href="@routes.AdminController.enableUser(user.id.toString)">Enable</a></td>
+            <td><a @if(!user.isEnable) { class = "disabled" } href="@routes.AdminController.disableUser(user.id.toString)">Disable</a></td>
         </tr>
         }
         </tbody>

@@ -2,13 +2,13 @@ package services
 
 import javax.inject.Inject
 
-import models.{AssignmentInfo, AssignmentInterface, UserInfo}
+import models.{AssignmentInfo, AssignmentInterface}
 import play.api.db.slick.DatabaseConfigProvider
 
 import scala.concurrent.Future
 
-class DbServiceAssignment@Inject()(protected  val dbConfigProvider:DatabaseConfigProvider,
-                                   assignmentInterface: AssignmentInterface){
+class DbServiceAssignment @Inject()(protected val dbConfigProvider: DatabaseConfigProvider,
+                                    assignmentInterface: AssignmentInterface) {
 
   def store(assignmentInfo: AssignmentInfo): Future[Boolean] = {
     assignmentInterface.storeAssignment(assignmentInfo)

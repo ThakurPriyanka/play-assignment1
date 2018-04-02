@@ -9,14 +9,19 @@ import play.api.data.Forms._
 
   class PasswordForm  {
 
-    val passwordInfoForm = Form(
-      mapping(
-        "email" -> email,
-        "pwd"-> text.verifying("", _.nonEmpty),
-        "confirm_pwd"-> text.verifying("", _.nonEmpty),
+    val passwordInfoForm: Form[PasswordInfoForm] = {
+      Form(
+        mapping(
+          "email" -> email,
+          "pwd" -> text.verifying("", _.nonEmpty),
+          "confirm_pwd" -> text.verifying("", _.nonEmpty),
+        )
+        (PasswordInfoForm.apply)(PasswordInfoForm.unapply) verifying(
+            "Passwords do not match",
+            field => field match {
+              case user => user.pwd == user.confirm_pwd
+              case _ => false
+            })
       )
-      (PasswordInfoForm.apply)(PasswordInfoForm.unapply) verifying(
-        "Passwords do not match",
-        field => field match { case user => user.pwd == user.confirm_pwd})
-    )
+    }
 }

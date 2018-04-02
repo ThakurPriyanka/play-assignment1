@@ -9,7 +9,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{POST, contentAsString}
 import scala.concurrent.duration._
 
-class LoginTest extends PlaySpec with Mockito {
+  class LoginTest extends PlaySpec with Mockito {
   "Rending add login page" in new App {
     implicit val duration: Timeout = 5 seconds
     val request = FakeRequest(POST, "/login")

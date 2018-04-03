@@ -15,12 +15,12 @@ class UserForm {
   val userInfoForm: Form[UserInfoForm] = {
     Form(
       mapping(
-        "first_name" -> text.verifying("", _.nonEmpty),
+        "first_name" -> text.verifying("Please enter the first Name", _.nonEmpty),
         "middle_name" -> text,
-        "last_name" -> text.verifying("", _.nonEmpty),
+        "last_name" -> text.verifying("Please enter the last name", _.nonEmpty),
         "email" -> email,
-        "pwd" -> text.verifying("", _.nonEmpty),
-        "confirm_pwd" -> text.verifying("", _.nonEmpty),
+        "pwd" -> text.verifying("Please enter the password", _.nonEmpty),
+        "confirm_pwd" -> text.verifying("Please enter the confirm password", _.nonEmpty),
         "mobile_number" -> text.verifying("A valid phone number is required", field => {
           val regex = """^[789]\d{9}$""".r
           field match {
@@ -29,9 +29,9 @@ class UserForm {
           }
         }
         ),
-        "gender" -> text.verifying("", _.nonEmpty),
+        "gender" -> text.verifying("Please select the gender", _.nonEmpty),
         "age" -> number(min = minAge, max = maxAge),
-        "hobbies" -> text.verifying("", _.nonEmpty)
+        "hobbies" -> text.verifying("Please select hobbies", _.nonEmpty)
       )(UserInfoForm.apply)(UserInfoForm.unapply)
           verifying(
           "Passwords do not match",

@@ -10,8 +10,8 @@ class AssignmentForm {
   val assignmentInfoForm: Form[AssignmentInfoForm] = {
     Form(
       mapping(
-        "title" -> text.verifying("", _.nonEmpty),
-        "description" -> text.verifying("", _.nonEmpty),
+        "title" -> text.verifying("Please enter the title",title =>  title.nonEmpty),
+        "description" -> text.verifying("Please enter the description",description =>  description.nonEmpty)
       )
       (AssignmentInfoForm.apply)(AssignmentInfoForm.unapply)
     )

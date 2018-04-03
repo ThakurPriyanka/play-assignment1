@@ -10,6 +10,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.12.3"
 
+coverageExcludedPackages := "controllers.javascript;router;"
+
 libraryDependencies ++=  Seq("org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   ehcache,
   specs2 % Test,

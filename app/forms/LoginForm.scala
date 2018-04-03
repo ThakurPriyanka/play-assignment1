@@ -11,7 +11,7 @@ class LoginForm {
     Form(
       mapping(
         "email" -> email,
-        "pwd" -> text.verifying("", _.nonEmpty),
+        "pwd" -> text.verifying("Please enter the password", _.nonEmpty)
       )
       (LoginInfoForm.apply)(LoginInfoForm.unapply)
     )

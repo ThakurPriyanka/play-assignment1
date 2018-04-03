@@ -12,15 +12,14 @@ import play.api.data.Forms._
     val passwordInfoForm: Form[PasswordInfoForm] = {
       Form(
         mapping(
-          "email" -> email,
-          "pwd" -> text.verifying("", _.nonEmpty),
-          "confirm_pwd" -> text.verifying("", _.nonEmpty),
+          "email" -> email.verifying("Please enter the email", _.nonEmpty),
+          "pwd" -> text.verifying("Please enter the password", _.nonEmpty),
+          "confirm_pwd" -> text.verifying("Please enter the confirm password", _.nonEmpty)
         )
         (PasswordInfoForm.apply)(PasswordInfoForm.unapply) verifying(
             "Passwords do not match",
             field => field match {
               case user => user.pwd == user.confirm_pwd
-              case _ => false
             })
       )
     }

@@ -127,8 +127,24 @@ class AdminControllerTest extends PlaySpec with Mockito {
 
   "enable user" in {
     val controller = getMockedObject
-    val id = 1
+    val id = 5
     when(controller.dbService.enableUser(id)) thenReturn Future.successful(true)
+    val result = controller.adminController.enableUser(id.toString).apply(FakeRequest().withCSRFToken)
+    status(result) must equal(OK)
+  }
+
+  "disable user that does not exists" in {
+    val controller = getMockedObject
+    val id = 5
+    when(controller.dbService.disableUser(id)) thenReturn Future.successful(false)
+    val result = controller.adminController.disableUser(id.toString).apply(FakeRequest().withCSRFToken)
+    status(result) must equal(OK)
+  }
+
+  "enable user that does not exists" in {
+    val controller = getMockedObject
+    val id = 1
+    when(controller.dbService.enableUser(id)) thenReturn Future.successful(false)
     val result = controller.adminController.enableUser(id.toString).apply(FakeRequest().withCSRFToken)
     status(result) must equal(OK)
   }

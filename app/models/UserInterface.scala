@@ -43,14 +43,29 @@ trait UserProfileBaseRepositoryImpl extends UserProfileBaseRepository {
 
   import profile.api._
 
+  /**
+    *
+    * @param userProfile . information of user you want to store
+    * @return . true or false on successful storage or not
+    */
   def store(userProfile: UserInfo): Future[Boolean] =
     db.run(userProfileQuery += userProfile) map (_ > 0)
 
+  /**
+    *
+    * @param email . of user whose information want to get
+    * @return . option of user information
+    */
   def findByEmail(email: String): Future[Option[UserInfo]] = {
     val queryResult = userProfileQuery.filter(_.email.toLowerCase === email.toLowerCase).result.headOption
     db.run(queryResult)
   }
 
+  /**
+    *
+    * @param userInfo . information of user you want to update
+    * @return . true or false on successful update or not
+    */
   def updateUserProfile(userInfo: UserInfo): Future[Boolean] = {
     db.run(userProfileQuery.filter(_.email.toLowerCase === userInfo.email.toLowerCase)
         .map(user => (user.first_name, user.middle_name, user.last_name, user.mobile_number, user.gender, user.age, user.hobbies))
@@ -58,17 +73,33 @@ trait UserProfileBaseRepositoryImpl extends UserProfileBaseRepository {
           userInfo.gender, userInfo.age, userInfo.hobbies)) map (_ > 0)
   }
 
+  /**
+    *
+    * @param email . of user who want to login
+    * @param pwd . of user who want to login
+    * @return . option of user information according to email and password
+    */
   def checkLogin(email: String, pwd: String): Future[Option[UserInfo]] = {
     val queryResult = userProfileQuery.filter(user => user.email.toLowerCase === email.toLowerCase && user.pwd === pwd).result.headOption
     db.run(queryResult)
   }
 
+  /**
+    *
+    * @param email . of user who want to change password
+    * @param pwd . of user new password
+    * @return . true false on successful updation of password or not
+    */
   def changePassword(email: String, pwd: String): Future[Boolean] = {
     db.run(userProfileQuery.filter(_.email.toLowerCase === email.toLowerCase)
         .map(user => (user.pwd))
         .update(pwd)) map (_ > 0)
   }
 
+  /**
+    *
+    * @return . list of user Information
+    */
   def getAllUser(): Future[List[UserInfo]] = {
     val queryResult = userProfileQuery.map(userDetail => {
       userDetail
@@ -76,6 +107,11 @@ trait UserProfileBaseRepositoryImpl extends UserProfileBaseRepository {
     db.run(queryResult)
   }
 
+  /**
+    *
+    * @param id . of user to make that user enable
+    * @return . true or false on successful enabling or not
+    */
   def enable(id: Int): Future[Boolean] = {
     val valueOfEnable = true
     db.run(userProfileQuery.filter(_.id === id)
@@ -83,6 +119,11 @@ trait UserProfileBaseRepositoryImpl extends UserProfileBaseRepository {
         .update(valueOfEnable)) map (_ > 0)
   }
 
+  /**
+    *
+    * @param id . of user to make that user disable
+    * @return . true or false on successful disabling or not
+    */
   def disable(id: Int): Future[Boolean] = {
     val valueOfDisable = false
     db.run(userProfileQuery.filter(_.id === id)

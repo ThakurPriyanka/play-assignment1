@@ -13,41 +13,33 @@ import utils.PasswordHashing
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-/**
-  * This controller creates an `Action` to handle HTTP requests to the
-  * application's home page.
-  */
 @Singleton
 class HomeController @Inject()(cc: ControllerComponents, userForm: UserForm, profileForm: ProfileForm,
                                loginForm: LoginForm, passwordForm: PasswordForm, dbService: DbService,
                                dbServiceAssignment: DbServiceAssignment) extends AbstractController(cc) {
-
   /**
-    * Create an Action to render an HTML page.
-    *
-    * The configuration in the `routes` file means that this method
-    * will be called when the application receives a `GET` request with
-    * a path of `/`.
+    * @return . go to index page
     */
-
   def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())
   }
 
+  /**
+    * @return . go to sign up page
+    */
   def goToSignUp(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.signUp(userForm.userInfoForm))
   }
-
+  /**
+    * @return . after successful sign up go to profile page else not store
+    */
   def signUp(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
 
     userForm.userInfoForm.bindFromRequest().fold(
       formWithError => {
-        //        Future.successful(BadRequest(views.html.error1(formWithError)))
-        Logger.info(s"${formWithError}")
         Future.successful(BadRequest(views.html.signUp(formWithError)))
       },
       data => {
-        Logger.info("stored")
         val isAdmin = false
         val isEnable = true
         val encryptedPwd = PasswordHashing.encryptPassword(data.pwd)
@@ -66,8 +58,10 @@ class HomeController @Inject()(cc: ControllerComponents, userForm: UserForm, pro
     )
   }
 
+  /**
+    * @return . go to profile page if session has email value
+    */
   def goToProfile(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
-    //  Ok(views.html.index())
     val email = request.session.get("email") match {
       case Some(email) => email
       case None => "EmailId does not exists"
@@ -81,8 +75,11 @@ class HomeController @Inject()(cc: ControllerComponents, userForm: UserForm, pro
     }
   }
 
+  /**
+    * @return . update profile information for user if session does exit then Ok
+    *         else get user detail fill the form
+    */
   def profile(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
-    Logger.info("entered")
     val email = request.session.get("email") match {
       case Some(email) => email
       case None => "EmailId does not exists"
@@ -104,12 +101,10 @@ class HomeController @Inject()(cc: ControllerComponents, userForm: UserForm, pro
         }
       },
       data => {
-        Logger.info("stored")
         useResult.flatMap {
           case Some(user)
           => val record = UserInfo(0, data.first_name, data.middle_name, data.last_name, user.email,
             user.pwd, data.mobile_number, data.gender, data.age, data.hobbies, user.isAdmin, user.isEnable)
-            Logger.info(record.first_name)
             dbService.updateInfo(record).map {
               case true
               => Ok("stored")
@@ -120,19 +115,22 @@ class HomeController @Inject()(cc: ControllerComponents, userForm: UserForm, pro
       }
     )
   }
-
+  /**
+    * @return . go to forget password page
+    */
   def forgetPassword(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.forgetpassword(passwordForm.passwordInfoForm))
   }
-
+  /**
+    * @return . update the password if form is filled correct then OK else if db dont store then ok
+    *         if form not filled correctly then badRequest
+    */
   def changePassword(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] => {
     passwordForm.passwordInfoForm.bindFromRequest().fold(
       formWithError => {
-        Logger.info(s"${formWithError}")
         Future.successful(BadRequest(views.html.forgetpassword(formWithError)))
       },
       data => {
-        Logger.info("stored")
         val encryptedPwd = PasswordHashing.encryptPassword(data.pwd)
         dbService.updatePassword(data.email, encryptedPwd).map {
           case true
@@ -144,19 +142,23 @@ class HomeController @Inject()(cc: ControllerComponents, userForm: UserForm, pro
     )
   }
   }
-
-
+  /**
+    *
+    * @return . go to login page
+    */
   def goToLogin(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.login(loginForm.loginInfoForm))
   }
-
+  /**
+    * @return . on right login information go to index page else go to ok
+    *         if user is not enable then redirect to login page
+    */
   def login(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     loginForm.loginInfoForm.bindFromRequest().fold(
       formWithError => {
         Future.successful(BadRequest(views.html.login(formWithError)))
       },
       data => {
-        Logger.info("stored")
         val encryptedPwd = PasswordHashing.encryptPassword(data.pwd)
         dbService.checkLoginDetail(data.email, encryptedPwd).map {
           case Some(user)
@@ -178,14 +180,18 @@ class HomeController @Inject()(cc: ControllerComponents, userForm: UserForm, pro
       }
     )
   }
-
+  /**
+    * @return . show all the list of assignment
+    */
   def viewAssignmentUser(): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     val assignmentResult = dbServiceAssignment.getAllAssignment()
     assignmentResult.map { assignmentList =>
       Ok(views.html.viewAssignmentUser(assignmentList))
     }
   }
-
+  /**
+    * @return . clear the session go to index page
+    */
   def signOut(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Redirect(routes.HomeController.index).withNewSession
   }

@@ -34,14 +34,28 @@ trait AssignmentBaseRepositoryImpl extends AssignmentBaseRepository {
 
   import profile.api._
 
+  /**
+    *
+    * @param assignment . assignment that you want to store in db
+    * @return . future of true on successful storing of assignment else future of false
+    */
   def storeAssignment(assignment: AssignmentInfo): Future[Boolean] =
     db.run(assignmentQuery += assignment) map (_ > 0)
 
+  /**
+    *
+    * @param title . of assignment you want to have detail
+    * @return . option assignment information
+    */
   def getAssignment(title: String): Future[Option[AssignmentInfo]] = {
     val queryResult = assignmentQuery.filter(_.title.toLowerCase === title.toLowerCase).result.headOption
     db.run(queryResult)
   }
 
+  /**
+    *
+    * @return . list of all assignment
+    */
   def getAllAssignment(): Future[List[AssignmentInfo]] = {
     val queryResult = assignmentQuery.map(assignmentDetail => {
       assignmentDetail
@@ -49,6 +63,11 @@ trait AssignmentBaseRepositoryImpl extends AssignmentBaseRepository {
     db.run(queryResult)
   }
 
+  /**
+    *
+    * @param id . of assignment you want to delete
+    * @return . integer of number of rows effected
+    */
   def deleteAssignment(id: Int): Future[Int] = {
     db.run(assignmentQuery.filter(_.id === id).delete)
   }

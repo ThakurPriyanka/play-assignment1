@@ -101,7 +101,7 @@ trait UserProfileBaseRepositoryImpl extends UserProfileBaseRepository {
     * @return . list of user Information
     */
   def getAllUser(): Future[List[UserInfo]] = {
-    val queryResult = userProfileQuery.map(userDetail => {
+    val queryResult = userProfileQuery.filter(_.isAdmin === false).map(userDetail => {
       userDetail
     }).to[List].result
     db.run(queryResult)

@@ -6,12 +6,6 @@
         </div>
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a href="@routes.HomeController.goToSignUp()" class="menuItem">Sign Up</a>
-            </li>
-            <li>
-                <a href="@routes.HomeController.goToLogin()" class="menuItem">Login</a>
-            </li>
-            <li>
                 @if(request.session.get("first_name")) {       <a href="@routes.HomeController.signOut()" class="menuItem">Log out</a> }
             </li>
             <li>

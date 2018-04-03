@@ -10,7 +10,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.12.3"
 
-coverageExcludedPackages := "controllers.javascript;router;"
+coverageExcludedPackages := "controllers.javascript;router;views.html;forms;utils;" +
+    "controllers/ReverseAdminController;controllers/ReverseAssets;controllers/ReverseHomeController"
 
 libraryDependencies ++=  Seq("org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
   ehcache,
